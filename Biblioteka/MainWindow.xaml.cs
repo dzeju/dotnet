@@ -23,12 +23,33 @@ namespace Biblioteka
         public MainWindow()
         {
             InitializeComponent();
+            Refresh();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
             AddItem AddI = new AddItem();
             AddI.FileOpen();
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            using (var db = new LibraryContext())
+            {
+                DG.DataContext = db.Songs.ToList<Song>();
+            }
+        }
+
+        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        {
+            //Song model = new Song();
+            using (var db = new LibraryContext())
+            {
+                db.Songs.RemoveRange(db.Songs);
+                db.SaveChanges();
+                Refresh();
+            }
         }
     }
 }

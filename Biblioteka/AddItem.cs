@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Biblioteka
 {
@@ -26,8 +27,26 @@ namespace Biblioteka
         private void DataRead(string file)
         {
             TagLib.File f = TagLib.File.Create(file);
-            MessageBox.Show(f.Tag.Title);
-            
+            //MessageBox.Show(f.Tag.Title);
+            using (var db = new LibraryContext())
+            {
+                try
+                {
+                    var song = db.Songs
+                    .OrderBy(b => b.Id)
+                    .First();
+                }
+                catch { }//something?
+                db.Add(
+                    new Song
+                    {
+                        Title = f.Tag.Title,
+                        Author = f.Tag.FirstPerformer,
+                        Album = f.Tag.Album,
+                        Location = file
+                    });
+                db.SaveChanges();
+            }
         }
 
     }

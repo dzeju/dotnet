@@ -6,6 +6,24 @@
         xmlns:local="clr-namespace:Biblioteka"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#FF232323">
+    <Window.Resources>
+        <!-- DataGrid style -->
+        <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
+            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>
+        </Style>
+        <!-- DataGridColumnHeader style -->
+        <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="#FF232323"/>
+            <Setter Property="Foreground" Value="#FFD1D1D1"/>
+            <Setter Property="FontSize" Value="18" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="ToolTip" Value="Click to sort."/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -15,8 +33,28 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>-->
         <Rectangle Stroke="#00000000" Fill="#FF191919"/>
-        <Button Grid.Column="0" Content="Add..." HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top" Background="#00232323" Height="36" Width="148" BorderBrush="#00232323" Foreground="#FFD1D1D1" FontFamily="Arial Rounded MT Bold" FontSize="16" FontWeight="Normal" FontStyle="Normal" Click="Button_Click"/>
-        <DataGrid Grid.Column="1" Background="#FF232323" Foreground="#FFD1D1D1" BorderBrush="{x:Null}" />
+        <Button x:Name="btnAdd" Grid.Column="0" Content="Add..." HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top"
+                Background="#00232323" Height="36" Width="148" BorderBrush="#00232323" Foreground="#FFD1D1D1" 
+                FontFamily="Arial Rounded MT Bold" FontSize="16" FontWeight="Normal" FontStyle="Normal" Click="btnAdd_Click"/>
+        <Button x:Name="btnRemove" Grid.Column="0" Content="Remove all" Margin="2,136,0,0" VerticalAlignment="Top"
+            Background="#00232323" Height="36" Width="148" BorderBrush="#00232323" Foreground="#FFD1D1D1" 
+            FontFamily="Arial Rounded MT Bold" FontSize="16" FontWeight="Normal" FontStyle="Normal" Click="btnRemove_Click"/>
+        
+        <DataGrid Grid.Column="1" Name="DG" ItemsSource="{Binding}" AutoGenerateColumns="False" Background="#FF232323" 
+                  Foreground="#FFD1D1D1" BorderBrush="{x:Null}" Visibility="Visible" AlternatingRowBackground="#00000000" 
+                  RowBackground="#00000000" HeadersVisibility="Column" HorizontalGridLinesBrush="#33646464" 
+                  VerticalGridLinesBrush="#00000000" Style="{DynamicResource DataGridStyle1}" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*" FontSize="16"/>
+                <DataGridTextColumn Header="Author"  Binding="{Binding Author}" Width="*" FontSize="16"/>
+                <DataGridTextColumn Header="Album"  Binding="{Binding Album}" Width="150" FontSize="16"/>
+                <!--<DataGridTextColumn Header="Loc"  Binding="{Binding Location}"/>-->
+            </DataGrid.Columns>
+        </DataGrid>
+        
+
+
+
 
 
 
