@@ -1,0 +1,45 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "Biblioteka/1.0.0": {
+        "dependencies": {
+          "taglib": "2.1.0"
+        },
+        "runtime": {
+          "Biblioteka.dll": {}
+        }
+      },
+      "taglib/2.1.0": {
+        "runtime": {
+          "lib/policy.2.0.taglib-sharp.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          },
+          "lib/taglib-sharp.dll": {
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Biblioteka/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "taglib/2.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PuBT0KO/RJqxVKcM4tE0GDQIOA3584d2pHaLLh+X7tBz9MzFn9/mrVYaA63M+n7ED2dBXVtJBoogGnSxaqE7vg==",
+      "path": "taglib/2.1.0",
+      "hashPath": "taglib.2.1.0.nupkg.sha512"
+    }
+  }
+}
