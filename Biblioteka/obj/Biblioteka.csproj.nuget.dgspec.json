@@ -51,6 +51,14 @@
               "target": "Package",
               "version": "[3.1.3, )"
             },
+            "VideoLAN.LibVLC.Windows": {
+              "target": "Package",
+              "version": "[3.0.8.1, )"
+            },
+            "Vlc.DotNet.Core": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "taglib": {
               "target": "Package",
               "version": "[2.1.0, )"

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reflection;
 
 namespace Biblioteka
 {
@@ -24,9 +27,11 @@ namespace Biblioteka
         {
             InitializeComponent();
             Refresh();
+            
+            
         }
 
-        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             AddItem AddI = new AddItem();
             AddI.FileOpen();
@@ -41,7 +46,7 @@ namespace Biblioteka
             }
         }
 
-        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
             //Song model = new Song();
             MessageBoxResult dR = MessageBox.Show("Delete EVERYTHING?", "Confirm", MessageBoxButton.YesNo);
@@ -56,7 +61,7 @@ namespace Biblioteka
             }
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             Song model = (Song)DG.SelectedItem;
             if (model != null)
@@ -77,9 +82,28 @@ namespace Biblioteka
             }
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            var currentAssembly = Assembly.GetEntryAssembly();
+            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
+            var libDirectory = new DirectoryInfo(System.IO.Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64"));
+            Song model = (Song)DG.SelectedItem;
+
+            using (var mediaPlayer = new Vlc.DotNet.Core.VlcMediaPlayer(libDirectory))
+            {
+                mediaPlayer.SetMedia(new FileInfo(model.Location));
+
+                mediaPlayer.Play();
+
+                mediaPlayer.Audio.Volume = 100;
+                
+                MessageBox.Show("Hello There");
+            }
         }
     }
 }
