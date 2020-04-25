@@ -16,7 +16,15 @@ namespace Biblioteka
             {
                 case DialogResult.OK:
                     string file = fileDialog.FileName;
-                    DataRead(file);
+                    try
+                    {
+                        DataRead(file);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("No data in a file :/");
+                        break;
+                    }
                     break;
                 case DialogResult.Cancel:
                 default:
@@ -26,17 +34,17 @@ namespace Biblioteka
 
         private void DataRead(string file)
         {
-            TagLib.File f = TagLib.File.Create(file);
-            //MessageBox.Show(f.Tag.Title);
+            TagLib.File f = TagLib.File.Create(file);                             //exceptions?
+            if (f.Tag.Title == "" || f.Tag.Title == null) throw new Exception();  //TEMPORARY
             using (var db = new LibraryContext())
             {
-                try
+               /* try
                 {
                     var song = db.Songs
                     .OrderBy(b => b.Id)
                     .First();
                 }
-                catch { }//something?
+                catch { }*///something?
                 db.Add(
                     new Song
                     {
