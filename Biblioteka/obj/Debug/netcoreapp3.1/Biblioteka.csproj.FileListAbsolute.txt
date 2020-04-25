@@ -1177,3 +1177,4 @@ C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\libvlc\win-
 C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\Vlc.DotNet.Core.dll
 C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\Vlc.DotNet.Core.Interops.dll
 C:\Users\Kuba\source\repos\dotnet\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.csprojAssemblyReference.cache
+C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\Vlc.DotNet.Wpf.dll

@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
+using Vlc.DotNet.Wpf;
 
 namespace Biblioteka
 {
@@ -23,12 +24,17 @@ namespace Biblioteka
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly DirectoryInfo vlcLibDirectory;
+        private VlcControl control;
         public MainWindow()
         {
             InitializeComponent();
             Refresh();
-            
-            
+
+            var currentAssembly = Assembly.GetEntryAssembly();
+            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
+            // Default installation path of VideoLAN.LibVLC.Windows
+            vlcLibDirectory = new DirectoryInfo(System.IO.Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64"));
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -89,12 +95,9 @@ namespace Biblioteka
 
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            var currentAssembly = Assembly.GetEntryAssembly();
-            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
-            var libDirectory = new DirectoryInfo(System.IO.Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64"));
             Song model = (Song)DG.SelectedItem;
-
-            using (var mediaPlayer = new Vlc.DotNet.Core.VlcMediaPlayer(libDirectory))
+            /*
+            using (var mediaPlayer = new Vlc.DotNet.Wpf.vlcMediaPlayer(vlcLibDirectory))
             {
                 mediaPlayer.SetMedia(new FileInfo(model.Location));
 
@@ -103,7 +106,26 @@ namespace Biblioteka
                 mediaPlayer.Audio.Volume = 100;
                 
                 MessageBox.Show("Hello There");
-            }
+            }*/
+            this.control?.Dispose();
+            this.control = new VlcControl();
+            //this.ControlContainer.Content = this.control;
+            this.control.SourceProvider.CreatePlayer(this.vlcLibDirectory);
+
+            // This can also be called before EndInit
+            this.control.SourceProvider.MediaPlayer.Log += (_, args) =>
+            {
+                string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
+                System.Diagnostics.Debug.WriteLine(message);
+            };
+
+            control.SourceProvider.MediaPlayer.Play(new FileInfo(model.Location));
+        }
+
+        private void BtnStop_Click(object sender, RoutedEventArgs e)
+        {
+            this.control?.Dispose();
+            this.control = null;
         }
     }
 }

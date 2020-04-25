@@ -480,6 +480,15 @@
         "runtime": {
           "lib/netstandard2.0/Vlc.DotNet.Core.Interops.dll": {}
         }
+      },
+      "Vlc.DotNet.Wpf/3.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Vlc.DotNet.Wpf.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Vlc.DotNet.Wpf.dll": {}
+        }
       }
     }
   },
@@ -2590,6 +2599,20 @@
         "vlc.dotnet.core.interops.3.0.0.nupkg.sha512",
         "vlc.dotnet.core.interops.nuspec"
       ]
+    },
+    "Vlc.DotNet.Wpf/3.0.0": {
+      "sha512": "Jw1l5Bz5unG1U8ddQl/w+zC+8hF7umlLUv9uad9rmbb4ky2LaRb0tdMHq1T/Dn36wznAdBnSIwk/wwXnsLItLQ==",
+      "type": "package",
+      "path": "vlc.dotnet.wpf/3.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/Vlc.DotNet.Wpf.dll",
+        "lib/net40/Vlc.DotNet.Wpf.dll",
+        "lib/net45/Vlc.DotNet.Wpf.dll",
+        "vlc.dotnet.wpf.3.0.0.nupkg.sha512",
+        "vlc.dotnet.wpf.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -2598,6 +2621,7 @@
       "Microsoft.EntityFrameworkCore.Tools >= 3.1.3",
       "VideoLAN.LibVLC.Windows >= 3.0.8.1",
       "Vlc.DotNet.Core >= 3.0.0",
+      "Vlc.DotNet.Wpf >= 3.0.0",
       "taglib >= 2.1.0"
     ]
   },
@@ -2660,6 +2684,10 @@
             "target": "Package",
             "version": "[3.0.0, )"
           },
+          "Vlc.DotNet.Wpf": {
+            "target": "Package",
+            "version": "[3.0.0, )"
+          },
           "taglib": {
             "target": "Package",
             "version": "[2.1.0, )"
@@ -2694,6 +2722,16 @@
       "warningLevel": 1,
       "message": "Package 'taglib 2.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
       "libraryId": "taglib",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Vlc.DotNet.Wpf 3.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Vlc.DotNet.Wpf",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]

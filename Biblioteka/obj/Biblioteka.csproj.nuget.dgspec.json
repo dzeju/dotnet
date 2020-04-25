@@ -59,6 +59,10 @@
               "target": "Package",
               "version": "[3.0.0, )"
             },
+            "Vlc.DotNet.Wpf": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
             "taglib": {
               "target": "Package",
               "version": "[2.1.0, )"
