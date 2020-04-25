@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reflection;
+using Vlc.DotNet.Wpf;
 
 namespace Biblioteka
 {
@@ -20,13 +24,20 @@ namespace Biblioteka
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly DirectoryInfo vlcLibDirectory;
+        private VlcControl control;
         public MainWindow()
         {
             InitializeComponent();
             Refresh();
+
+            var currentAssembly = Assembly.GetEntryAssembly();
+            var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
+            // Default installation path of VideoLAN.LibVLC.Windows
+            vlcLibDirectory = new DirectoryInfo(System.IO.Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64"));
         }
 
-        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             AddItem AddI = new AddItem();
             AddI.FileOpen();
@@ -41,7 +52,7 @@ namespace Biblioteka
             }
         }
 
-        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
             //Song model = new Song();
             MessageBoxResult dR = MessageBox.Show("Delete EVERYTHING?", "Confirm", MessageBoxButton.YesNo);
@@ -56,7 +67,7 @@ namespace Biblioteka
             }
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             Song model = (Song)DG.SelectedItem;
             if (model != null)
@@ -77,9 +88,44 @@ namespace Biblioteka
             }
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            Song model = (Song)DG.SelectedItem;
+            /*
+            using (var mediaPlayer = new Vlc.DotNet.Wpf.vlcMediaPlayer(vlcLibDirectory))
+            {
+                mediaPlayer.SetMedia(new FileInfo(model.Location));
+
+                mediaPlayer.Play();
+
+                mediaPlayer.Audio.Volume = 100;
+                
+                MessageBox.Show("Hello There");
+            }*/
+            this.control?.Dispose();
+            this.control = new VlcControl();
+            //this.ControlContainer.Content = this.control;
+            this.control.SourceProvider.CreatePlayer(this.vlcLibDirectory);
+
+            // This can also be called before EndInit
+            this.control.SourceProvider.MediaPlayer.Log += (_, args) =>
+            {
+                string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
+                System.Diagnostics.Debug.WriteLine(message);
+            };
+
+            control.SourceProvider.MediaPlayer.Play(new FileInfo(model.Location));
+        }
+
+        private void BtnStop_Click(object sender, RoutedEventArgs e)
+        {
+            this.control?.Dispose();
+            this.control = null;
         }
     }
 }

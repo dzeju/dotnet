@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qMYJG20tjpADGLEKab8qoORY/q6YOTy3l2u4uZsniLmt0R1yr3Podl/pVP6XEOayZGZAb4M3w9ACvSxLe/x+qA==",
+  "dgSpecHash": "yq9DLu6OMLPWJWicjkJkICsxb5/GzBJb2EKlkKNI7eYc3bj9Ar9tbzbqGH6JkaiqRRK+LZJDi2sIa+fT2zGf8Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\Kuba\\source\\repos\\dotnet\\Biblioteka\\Biblioteka.csproj",
   "expectedPackageFiles": [
@@ -38,7 +38,11 @@
     "C:\\Users\\Kuba\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.7.0\\system.diagnostics.diagnosticsource.4.7.0.nupkg.sha512",
     "C:\\Users\\Kuba\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\Kuba\\.nuget\\packages\\system.text.json\\4.7.1\\system.text.json.4.7.1.nupkg.sha512",
-    "C:\\Users\\Kuba\\.nuget\\packages\\taglib\\2.1.0\\taglib.2.1.0.nupkg.sha512"
+    "C:\\Users\\Kuba\\.nuget\\packages\\taglib\\2.1.0\\taglib.2.1.0.nupkg.sha512",
+    "C:\\Users\\Kuba\\.nuget\\packages\\videolan.libvlc.windows\\3.0.8.1\\videolan.libvlc.windows.3.0.8.1.nupkg.sha512",
+    "C:\\Users\\Kuba\\.nuget\\packages\\vlc.dotnet.core\\3.0.0\\vlc.dotnet.core.3.0.0.nupkg.sha512",
+    "C:\\Users\\Kuba\\.nuget\\packages\\vlc.dotnet.core.interops\\3.0.0\\vlc.dotnet.core.interops.3.0.0.nupkg.sha512",
+    "C:\\Users\\Kuba\\.nuget\\packages\\vlc.dotnet.wpf\\3.0.0\\vlc.dotnet.wpf.3.0.0.nupkg.sha512"
   ],
   "logs": [
     {
@@ -47,6 +51,16 @@
       "warningLevel": 1,
       "message": "Package 'taglib 2.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
       "libraryId": "taglib",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Vlc.DotNet.Wpf 3.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "Vlc.DotNet.Wpf",
       "targetGraphs": [
         ".NETCoreApp,Version=v3.1"
       ]
