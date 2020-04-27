@@ -78,6 +78,8 @@
             </Style.Triggers>
         </Style>
 
+        <ImageBrush x:Key="Play" ImageSource="/icons8-play-96.png" Stretch="Fill" TileMode="FlipX"/>
+        <ImageBrush x:Key="Pause" ImageSource="/icons8-pause-96.png" Stretch="Fill" TileMode="FlipX"/>
 
     </Window.Resources>
 
@@ -119,11 +121,10 @@
         </DataGrid>
 
         <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Stroke="#00000000" Fill="#FF111111"/>
-        <Button Content="" Click="BtnPlay_Click" HorizontalAlignment="Center" Margin="0,0,50,0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" 
-                Style="{StaticResource ButtonStyle1}" >
-            <Button.Background>
-                <ImageBrush ImageSource="/icons8-play-96.png" Stretch="Fill" TileMode="FlipX"/>
-            </Button.Background>
+        <Button x:Name="btnPlayPause" Content="" Click="BtnPlay_Click" HorizontalAlignment="Center" Margin="0,0,50,0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" 
+                Style="{StaticResource ButtonStyle1}" Button.Background = "{DynamicResource Play}">
+            
+            
         </Button>
         <Button Content="" Click="BtnStop_Click" HorizontalAlignment="Center" Margin="50,0,0,0" Grid.Row="2" Grid.ColumnSpan="2"  VerticalAlignment="Center" 
                 Style="{StaticResource ButtonStyle1}" >
@@ -131,6 +132,5 @@
                 <ImageBrush ImageSource="/icons8-stop-96.png" Stretch="Fill" TileMode="FlipX"/>
             </Button.Background>
         </Button>
-
     </Grid>
 </Window>

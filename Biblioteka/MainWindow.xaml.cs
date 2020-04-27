@@ -26,6 +26,7 @@ namespace Biblioteka
     {
         private readonly DirectoryInfo vlcLibDirectory;
         private VlcControl control;
+        private string currentlyPlaying = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -96,30 +97,35 @@ namespace Biblioteka
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
             Song model = (Song)DG.SelectedItem;
-            /*
-            using (var mediaPlayer = new Vlc.DotNet.Wpf.vlcMediaPlayer(vlcLibDirectory))
+            if (this.control != null && control.SourceProvider.MediaPlayer.IsPlaying() && model.Location == currentlyPlaying) 
+            { 
+                control.SourceProvider.MediaPlayer.Pause();
+                this.btnPlayPause.Content = FindResource("Play");
+            }
+            else if (this.control != null && control.SourceProvider.MediaPlayer.IsPlaying() != true && model.Location == currentlyPlaying)
             {
-                mediaPlayer.SetMedia(new FileInfo(model.Location));
-
-                mediaPlayer.Play();
-
-                mediaPlayer.Audio.Volume = 100;
-                
-                MessageBox.Show("Hello There");
-            }*/
-            this.control?.Dispose();
-            this.control = new VlcControl();
-            //this.ControlContainer.Content = this.control;
-            this.control.SourceProvider.CreatePlayer(this.vlcLibDirectory);
-
-            // This can also be called before EndInit
-            this.control.SourceProvider.MediaPlayer.Log += (_, args) =>
+                control.SourceProvider.MediaPlayer.Play();
+                this.btnPlayPause.Content = FindResource("Pause");
+            }
+            else
             {
-                string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
-                System.Diagnostics.Debug.WriteLine(message);
-            };
+                this.control?.Dispose();
+                this.control = new VlcControl();
+                //this.ControlContainer.Content = this.control;
+                this.control.SourceProvider.CreatePlayer(this.vlcLibDirectory);
 
-            control.SourceProvider.MediaPlayer.Play(new FileInfo(model.Location));
+                // This can also be called before EndInit
+                this.control.SourceProvider.MediaPlayer.Log += (_, args) =>
+                {
+                    string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
+                    System.Diagnostics.Debug.WriteLine(message);
+                };
+
+                this.currentlyPlaying = model.Location;
+                control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
+                this.btnPlayPause.Content= FindResource("Pause");
+            }
+        
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
