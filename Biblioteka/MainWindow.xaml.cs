@@ -47,10 +47,8 @@ namespace Biblioteka
 
         public void Refresh()
         {
-            using (var db = new LibraryContext())
-            {
-                DG.DataContext = db.Songs.ToList<Song>();
-            }
+            using var db = new LibraryContext();
+            DG.DataContext = db.Songs.ToList<Song>();
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
@@ -59,12 +57,10 @@ namespace Biblioteka
             MessageBoxResult dR = MessageBox.Show("Delete EVERYTHING?", "Confirm", MessageBoxButton.YesNo);
             if (MessageBoxResult.Yes == dR)
             {
-                using (var db = new LibraryContext())
-                {
-                    db.Songs.RemoveRange(db.Songs);
-                    db.SaveChanges();
-                    Refresh();
-                }
+                using var db = new LibraryContext();
+                db.Songs.RemoveRange(db.Songs);
+                db.SaveChanges();
+                Refresh();
             }
         }
 
@@ -76,15 +72,15 @@ namespace Biblioteka
                 MessageBoxResult dR = MessageBox.Show("Delete \"" + model.Title + "\"?", "Confirm", MessageBoxButton.YesNo);
                 if (MessageBoxResult.Yes == dR)
                 {
-                    using (var db = new LibraryContext())
-                    {
-                        var entry = db.Entry(model);
-                        if (entry.State == Microsoft.EntityFrameworkCore.EntityState.Detached)
-                            db.Songs.Attach(model);
-                        db.Songs.Remove(model);
-                        db.SaveChanges();
-                        Refresh();
-                    }
+                    using var db = new LibraryContext();
+                    var entry = db.Entry(model);
+                    if (entry.State == Microsoft.EntityFrameworkCore.EntityState.Detached)
+                        db.Songs.Attach(model);
+                    if (model.Source == "YT")
+                        File.Delete(model.Location);
+                    db.Songs.Remove(model);
+                    db.SaveChanges();
+                    Refresh();
                 }
             }
         }
@@ -122,7 +118,10 @@ namespace Biblioteka
                 };
 
                 this.currentlyPlaying = model.Location;
-                control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
+                if (model.Source == "PC")
+                    control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
+                else if (model.Source == "YT")
+                    control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
                 this.btnPlayPause.Content= FindResource("Pause");
             }
         
@@ -132,6 +131,20 @@ namespace Biblioteka
         {
             this.control?.Dispose();
             this.control = null;
+        }
+
+        private void BtnYouTube_Click(object sender, RoutedEventArgs e)
+        {
+            var yt = new YouTubeSearch(this)
+            {
+                DataContext = this
+            };
+            try
+            {
+                yt.Show();
+                Refresh();
+            }
+            catch { }
         }
     }
 }

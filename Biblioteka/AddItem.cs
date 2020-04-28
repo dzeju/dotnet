@@ -36,25 +36,17 @@ namespace Biblioteka
         {
             TagLib.File f = TagLib.File.Create(file);                             //exceptions?
             if (f.Tag.Title == "" || f.Tag.Title == null) throw new Exception();  //TEMPORARY
-            using (var db = new LibraryContext())
-            {
-               /* try
+            using var db = new LibraryContext();
+            db.Add(
+                new Song
                 {
-                    var song = db.Songs
-                    .OrderBy(b => b.Id)
-                    .First();
-                }
-                catch { }*///something?
-                db.Add(
-                    new Song
-                    {
-                        Title = f.Tag.Title,
-                        Author = f.Tag.FirstPerformer,
-                        Album = f.Tag.Album,
-                        Location = file
-                    });
-                db.SaveChanges();
-            }
+                    Title = f.Tag.Title,
+                    Author = f.Tag.FirstPerformer,
+                    Album = f.Tag.Album,
+                    Location = file,
+                    Source = "PC"
+                });
+            db.SaveChanges();
         }
 
     }
