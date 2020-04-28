@@ -106,6 +106,8 @@
                 Click="BtnRemove_Click" Style="{StaticResource ButtonStyle}"/>
         <Button x:Name="btnDelete" Grid.Column="0" Grid.Row="1" Content="Delete" Margin="0,72,0,0" VerticalAlignment="Top" 
                 Click="BtnDelete_Click" Style="{StaticResource ButtonStyle}"/>
+        <Button x:Name="btnYouTube" Grid.Column="0" Grid.Row="1" Content="YouTube" Margin="0,108,0,0" VerticalAlignment="Top" 
+                Click="BtnYouTube_Click" Style="{StaticResource ButtonStyle}"/>
 
 
         <DataGrid Grid.Column="1" Grid.Row="1" Name="DG" ItemsSource="{Binding}" AutoGenerateColumns="False" Background="#FF232323" 
@@ -115,8 +117,9 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*" FontSize="16"/>
                 <DataGridTextColumn Header="Author"  Binding="{Binding Author}" Width="*" FontSize="16"/>
-                <DataGridTextColumn Header="Album"  Binding="{Binding Album}" Width="150" FontSize="16"/>
+                <DataGridTextColumn Header="Album"  Binding="{Binding Album}" Width="*" FontSize="16"/>
                 <DataGridTextColumn Header="ID"  Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Loc"  Binding="{Binding Location}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 

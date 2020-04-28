@@ -18,5 +18,6 @@ namespace Biblioteka
         public string Author { get; set; }
         public string Album { get; set; }
         public string Location { get; set; }
+        public string Source { get; set; }
     }
 }
