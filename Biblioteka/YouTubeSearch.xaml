@@ -11,11 +11,6 @@
         <!-- DataGrid style -->
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
             <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>
-            <!--<Style.Triggers>
-                <Trigger Property="IsMouseCaptured" Value="True">
-                    <Setter Property="Background" Value="#FF232323"/>
-                </Trigger>
-            </Style.Triggers>-->
         </Style>
         <!-- DataGridColumnHeader style -->
         <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
@@ -29,6 +24,15 @@
                     <Setter Property="ToolTip" Value="Click to sort."/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <!-- DataGridRow style -->
+        <Style x:Key="RowStyle1" TargetType="DataGridRow">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontFamily" Value="Arial" />
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#FF464646"/>
+            </Style.Resources>
         </Style>
 
         <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
@@ -64,20 +68,25 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-    
-        <Button x:Name="btnSearch" Grid.Row="0" Content="Search" HorizontalAlignment="Right" Grid.RowSpan="2" VerticalAlignment="Top" Click="BtnSearch_Click" Style="{StaticResource ButtonStyle}"/>
-        <TextBox x:Name="txtSearch" Grid.Row="0" HorizontalAlignment="Left" Text="" FontSize="25" FontFamily="Arial" 
-                 TextWrapping="Wrap" VerticalAlignment="Center" Width="600" Height="30" 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="btnSearch" Grid.Row="0" Grid.Column="1" Content="Search" HorizontalAlignment="Center" 
+                VerticalAlignment="Center" Click="BtnSearch_Click" Style="{StaticResource ButtonStyle}"/>
+        <TextBox x:Name="txtSearch" Grid.Row="0" Grid.Column="0" Text="" FontSize="25" FontFamily="Arial" 
+                 TextWrapping="Wrap" VerticalAlignment="Center" Height="30" 
                  Foreground="#80D1D1D1" Background="#FF464646"/>
 
-        <DataGrid x:Name="ytDG" Grid.Row="1" ItemsSource="{Binding}" AutoGenerateColumns="False" Background="#FF232323" 
+        <DataGrid x:Name="ytDG" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding}" AutoGenerateColumns="False" Background="#FF232323" 
                   Foreground="#FFD1D1D1" BorderBrush="{x:Null}" Visibility="Visible" AlternatingRowBackground="#00000000" 
                   RowBackground="#00000000" HeadersVisibility="Column" HorizontalGridLinesBrush="#33646464" 
                   VerticalGridLinesBrush="#00000000" Style="{DynamicResource DataGridStyle1}" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*" FontSize="16"/>
-                <DataGridTextColumn Header="Author"  Binding="{Binding Author}" Width="*" FontSize="16"/>
-                <DataGridTextColumn Header="Url"  Binding="{Binding Url}" Width="200" FontSize="16"/>
+                <DataGridTextColumn Header="Author"  Binding="{Binding Author}" Width="200" FontSize="16"/>
+                <DataGridTextColumn Header="Duration"  Binding="{Binding Duration}" Width="100" FontSize="16"/>
             </DataGrid.Columns>
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
@@ -85,5 +94,19 @@
                 </Style>
             </DataGrid.Resources>
         </DataGrid>
+        <ProgressBar x:Name="progBar" Grid.Row="1" Grid.ColumnSpan="2" Height="16" Margin="0,0,0,0" VerticalAlignment="Bottom" BorderBrush="#00000000">
+            <ProgressBar.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#00000000" Offset="0.669"/>
+                </LinearGradientBrush>
+            </ProgressBar.Background>
+            <ProgressBar.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#00000000"/>
+                    <GradientStop Color="#CC8F8F8F" Offset="0.921"/>
+                </LinearGradientBrush>
+            </ProgressBar.Foreground>
+        </ProgressBar>
     </Grid>
 </Window>

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="icons8-close-96.png" />
     <None Remove="icons8-pause-96.png" />
     <None Remove="icons8-play-96.png" />
     <None Remove="icons8-stop-96.png" />
@@ -34,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="icons8-close-96.png" />
     <Resource Include="icons8-pause-96.png" />
     <Resource Include="icons8-play-96.png" />
     <Resource Include="icons8-stop-96.png" />

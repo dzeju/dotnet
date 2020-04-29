@@ -11,11 +11,7 @@
         <!-- DataGrid style -->
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
             <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>
-            <!--<Style.Triggers>
-                <Trigger Property="IsMouseCaptured" Value="True">
-                    <Setter Property="Background" Value="#FF232323"/>
-                </Trigger>
-            </Style.Triggers>-->
+            <Setter Property="RowStyle"  Value="{DynamicResource RowStyle1}"/>
         </Style>
         <!-- DataGridColumnHeader style -->
         <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
@@ -30,6 +26,17 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- DataGridRow style -->
+        <Style x:Key="RowStyle1" TargetType="DataGridRow">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontFamily" Value="Arial" />
+            <EventSetter Event="MouseDoubleClick" Handler="DG_Row_DoubleClick"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#FF464646"/>
+            </Style.Resources>
+        </Style>
+
 
         <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="FontFamily" Value="Arial Rounded MT Bold"/>
@@ -78,6 +85,24 @@
             </Style.Triggers>
         </Style>
 
+        <Style x:Key="ButtonStyle2" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF464646"/>
+                    <Setter Property="BorderBrush" Value="#FF464646"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <ImageBrush x:Key="Play" ImageSource="/icons8-play-96.png" Stretch="Fill" TileMode="FlipX"/>
         <ImageBrush x:Key="Pause" ImageSource="/icons8-pause-96.png" Stretch="Fill" TileMode="FlipX"/>
 
@@ -91,22 +116,42 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="btnClose" Content="X" FontSize="25"  Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"
-                HorizontalAlignment="Right" Height="30" Width="30" FontFamily="Arial" 
-                Background="#00000000" Foreground="#FFD1D1D1" BorderBrush="#00000000" FontStretch="ExtraExpanded" Click="BtnClose_Click" Opacity="0.5"/>
+        <Button x:Name="btnClose" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"
+                HorizontalAlignment="Right" Height="30" Width="45" FontFamily="Arial" Foreground="#FFD1D1D1" BorderBrush="#00000000" FontStretch="ExtraExpanded" Click="BtnClose_Click" Opacity="0.5">
+            <Button.Background>
+                <ImageBrush ImageSource="/icons8-close-96.png" Stretch="Uniform"/>
+            </Button.Background>
+        </Button>
 
-        <Rectangle Grid.Row="1" Stroke="#00000000" Fill="#FF191919"/>
+        <Rectangle Grid.Row="0" Grid.RowSpan="2" Stroke="#00000000" Fill="#FF191919"/>
+        
+        <ProgressBar x:Name="progBar" Grid.Row="1" Grid.ColumnSpan="2" Height="16" Margin="0,0,0,0" VerticalAlignment="Bottom" BorderBrush="#00000000">
+            <ProgressBar.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#00000000" Offset="0.669"/>
+                </LinearGradientBrush>
+            </ProgressBar.Background>
+            <ProgressBar.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#00000000"/>
+                    <GradientStop Color="#CC8F8F8F" Offset="0.921"/>
+                </LinearGradientBrush>
+            </ProgressBar.Foreground>
+        </ProgressBar>
 
-        <Button x:Name="btnAdd" Grid.Column="0" Grid.Row="1" Content="Add..." Margin="0,0,0,0" VerticalAlignment="Top"
+
+        <Button x:Name="btnAdd" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Content="Add from drive" Margin="0,0,0,0" VerticalAlignment="Top"
                 Click="BtnAdd_Click" Style="{StaticResource ButtonStyle}"/>
-        <Button x:Name="btnRemove" Grid.Column="0" Grid.Row="1" Content="Remove all" Margin="0,36,0,0" VerticalAlignment="Top"
+        <Button x:Name="btnRemove" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Content="Remove all" VerticalAlignment="Bottom"
                 Click="BtnRemove_Click" Style="{StaticResource ButtonStyle}"/>
-        <Button x:Name="btnDelete" Grid.Column="0" Grid.Row="1" Content="Delete" Margin="0,72,0,0" VerticalAlignment="Top" 
+        <Button x:Name="btnDelete" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Content="Delete" Margin="0,72,0,0" VerticalAlignment="Top" 
                 Click="BtnDelete_Click" Style="{StaticResource ButtonStyle}"/>
-        <Button x:Name="btnYouTube" Grid.Column="0" Grid.Row="1" Content="YouTube" Margin="0,108,0,0" VerticalAlignment="Top" 
+        <Button x:Name="btnYouTube" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Content="Add from YouTube" Margin="0,36,0,0" VerticalAlignment="Top" 
                 Click="BtnYouTube_Click" Style="{StaticResource ButtonStyle}"/>
 
 
@@ -117,23 +162,32 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Title"  Binding="{Binding Title}" Width="*" FontSize="16"/>
                 <DataGridTextColumn Header="Author"  Binding="{Binding Author}" Width="*" FontSize="16"/>
-                <DataGridTextColumn Header="Album"  Binding="{Binding Album}" Width="*" FontSize="16"/>
-                <DataGridTextColumn Header="ID"  Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Loc"  Binding="{Binding Location}" Width="*"/>
+                <DataGridTextColumn Header="Album"  Binding="{Binding Album}" Width="150" FontSize="16"/>
+                <!--<DataGridTextColumn Header="ID"  Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Loc"  Binding="{Binding Location}" Width="*"/>-->
             </DataGrid.Columns>
+
         </DataGrid>
 
-        <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Stroke="#00000000" Fill="#FF111111"/>
-        <Button x:Name="btnPlayPause" Content="" Click="BtnPlay_Click" HorizontalAlignment="Center" Margin="0,0,50,0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" 
+        <Rectangle Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2" Stroke="#00000000" Fill="#FF111111"/>
+
+        <Button x:Name="btnPlayPause" Grid.RowSpan="2" Click="BtnPlay_Click" HorizontalAlignment="Center" Margin="0,0,50,0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" 
                 Style="{StaticResource ButtonStyle1}" Button.Background = "{DynamicResource Play}">
-            
-            
         </Button>
-        <Button Content="" Click="BtnStop_Click" HorizontalAlignment="Center" Margin="50,0,0,0" Grid.Row="2" Grid.ColumnSpan="2"  VerticalAlignment="Center" 
+
+        <Button Content="" Click="BtnStop_Click"  Grid.RowSpan="2" HorizontalAlignment="Center" Margin="50,0,0,0" Grid.Row="2" Grid.ColumnSpan="2"  VerticalAlignment="Center" 
                 Style="{StaticResource ButtonStyle1}" >
             <Button.Background>
                 <ImageBrush ImageSource="/icons8-stop-96.png" Stretch="Fill" TileMode="FlipX"/>
             </Button.Background>
         </Button>
+
+
+        <Label x:Name="labTitle" Grid.ColumnSpan="2" Content="" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" 
+               Foreground="#FFD1D1D1" FontFamily="Arial" FontWeight="Bold"/>
+
+        <Label x:Name="labAuthor" Grid.ColumnSpan="2" Content="" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" 
+               Foreground="#FFD1D1D1" FontFamily="Arial"/>
+
     </Grid>
 </Window>

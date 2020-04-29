@@ -1,17 +1,7 @@
-﻿using Google.Apis.Services;
-using Google.Apis.YouTube.v3;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using YoutubeExplode;
 using YoutubeExplode.Videos.Streams;
 
@@ -22,8 +12,10 @@ namespace Biblioteka
     /// </summary>
     public partial class YouTubeSearch : Window
     {
-        MainWindow MW;
         string loc = null;
+
+        public MainWindow MW { get; }
+
         public YouTubeSearch(MainWindow m)
         {
             InitializeComponent();
@@ -32,14 +24,19 @@ namespace Biblioteka
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
+            progBar.IsIndeterminate = true;
             await Search(txtSearch.Text);
+            progBar.IsIndeterminate = false;
         }
 
         private async void YtDG_Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             
             Video vid = (Video)ytDG.SelectedItem;
-            await AddYTItemAsync(vid);
+            progBar.IsIndeterminate = true;
+            try { await AddYTItemAsync(vid); }
+            catch { MessageBox.Show("Error downloading an audio"); }
+            progBar.IsIndeterminate = false;
             MessageBox.Show("Added");
         }
 
@@ -67,18 +64,18 @@ namespace Biblioteka
         {
             var items = new YoutubeClient();
             List<Video> list = new List<Video>();
-            //var streams = items.Search.GetVideosAsync(txtSearch);
-            await foreach (var item in items.Search.GetVideosAsync(txtSearch))
+
+            var videos = await items.Search.GetVideosAsync(txtSearch).BufferAsync(15);
+            foreach (var item in videos)
             {
                 Video vid = new Video();
                 vid.Title = item.Title;
                 vid.Author = item.Author;
                 vid.Url = item.Url;
+                vid.Duration = item.Duration.ToString();
                 list.Add(vid);
             }
-            MessageBox.Show("Hi");
             this.ytDG.DataContext = list;
-            
         }
 
         public async Task Download(string url, string name)
@@ -91,12 +88,11 @@ namespace Biblioteka
 
             if (streamInfo == null)
             {
-                MessageBox.Show("error");
+                MessageBox.Show("Error downloading an audio");
                 return;
             }
             else
             {
-                //var stream = await youtube.Videos.Streams.GetAsync(streamInfo);
                 loc = $"Download/{name}.{streamInfo.Container}";
                 await youtube.Videos.Streams.DownloadAsync(streamInfo, loc);
             }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace Biblioteka
 {
@@ -34,7 +31,7 @@ namespace Biblioteka
 
         private void DataRead(string file)
         {
-            TagLib.File f = TagLib.File.Create(file);                             //exceptions?
+            TagLib.File f = TagLib.File.Create(file);                            //exceptions?
             if (f.Tag.Title == "" || f.Tag.Title == null) throw new Exception();  //TEMPORARY
             using var db = new LibraryContext();
             db.Add(

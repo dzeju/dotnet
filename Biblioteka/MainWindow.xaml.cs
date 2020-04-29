@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Reflection;
 using Vlc.DotNet.Wpf;
 
@@ -30,25 +19,77 @@ namespace Biblioteka
         public MainWindow()
         {
             InitializeComponent();
+            progBar.IsIndeterminate = true;
+            Scan();
             Refresh();
 
             var currentAssembly = Assembly.GetEntryAssembly();
             var currentDirectory = new FileInfo(currentAssembly.Location).DirectoryName;
             // Default installation path of VideoLAN.LibVLC.Windows
             vlcLibDirectory = new DirectoryInfo(System.IO.Path.Combine(currentDirectory, "libvlc", IntPtr.Size == 4 ? "win-x86" : "win-x64"));
+
+            progBar.IsIndeterminate = false;
         }
 
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        private void Scan()
         {
-            AddItem AddI = new AddItem();
-            AddI.FileOpen();
-            Refresh();
+            using var db = new LibraryContext();
+            foreach (var item in db.Songs)
+            {
+                if (File.Exists(item.Location) == false)
+                {
+                    item.Source = null;
+                    Delete(item);
+                    Refresh();
+                }
+            }
+        }
+
+        private bool Delete (Song item)
+        {
+            using var db = new LibraryContext();
+            var entry = db.Entry(item);
+            if (entry.State == Microsoft.EntityFrameworkCore.EntityState.Detached)
+                db.Songs.Attach(item);
+            if (item.Source == "YT")
+            {
+                try { File.Delete(item.Location); }
+                catch { return false; }
+            }
+            db.Songs.Remove(item);
+            db.SaveChanges();
+            return true;
         }
 
         public void Refresh()
         {
             using var db = new LibraryContext();
             DG.DataContext = db.Songs.ToList<Song>();
+        }
+
+        private void Play(Song item)
+        {
+            this.control?.Dispose();
+            this.control = new VlcControl();
+            this.control.SourceProvider.CreatePlayer(this.vlcLibDirectory);
+
+            this.control.SourceProvider.MediaPlayer.Log += (_, args) =>
+            {
+                string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
+                System.Diagnostics.Debug.WriteLine(message);
+            };
+
+            this.currentlyPlaying = item.Location;
+            control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
+            labTitle.Content = item.Title;
+            labAuthor.Content = item.Author;
+        }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AddItem AddI = new AddItem();
+            AddI.FileOpen();
+            Refresh();
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
@@ -66,20 +107,13 @@ namespace Biblioteka
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            Song model = (Song)DG.SelectedItem;
-            if (model != null)
+            Song item = (Song)DG.SelectedItem;
+            if (item != null)
             {
-                MessageBoxResult dR = MessageBox.Show("Delete \"" + model.Title + "\"?", "Confirm", MessageBoxButton.YesNo);
+                MessageBoxResult dR = MessageBox.Show("Delete \"" + item.Title + "\"?", "Confirm", MessageBoxButton.YesNo);
                 if (MessageBoxResult.Yes == dR)
                 {
-                    using var db = new LibraryContext();
-                    var entry = db.Entry(model);
-                    if (entry.State == Microsoft.EntityFrameworkCore.EntityState.Detached)
-                        db.Songs.Attach(model);
-                    if (model.Source == "YT")
-                        File.Delete(model.Location);
-                    db.Songs.Remove(model);
-                    db.SaveChanges();
+                    if (Delete(item) == false) MessageBox.Show("Error deleting file");
                     Refresh();
                 }
             }
@@ -90,41 +124,31 @@ namespace Biblioteka
             Close();
         }
 
+        private void DG_Row_DoubleClick(object sender, RoutedEventArgs e)
+        {
+            Song item = (Song)DG.SelectedItem;
+            Play(item);
+            this.btnPlayPause.Background = (Brush)FindResource("Pause");
+        }
+
         private void BtnPlay_Click(object sender, RoutedEventArgs e)
         {
-            Song model = (Song)DG.SelectedItem;
-            if (this.control != null && control.SourceProvider.MediaPlayer.IsPlaying() && model.Location == currentlyPlaying) 
+            Song item = (Song)DG.SelectedItem;
+            if (this.control != null && control.SourceProvider.MediaPlayer.IsPlaying()) 
             { 
                 control.SourceProvider.MediaPlayer.Pause();
-                this.btnPlayPause.Content = FindResource("Play");
+                this.btnPlayPause.Background = (Brush)FindResource("Play");
             }
-            else if (this.control != null && control.SourceProvider.MediaPlayer.IsPlaying() != true && model.Location == currentlyPlaying)
+            else if (this.control != null && control.SourceProvider.MediaPlayer.IsPlaying() != true)
             {
                 control.SourceProvider.MediaPlayer.Play();
-                this.btnPlayPause.Content = FindResource("Pause");
+                this.btnPlayPause.Background = (Brush)FindResource("Pause");
             }
-            else
+            else if (item != null)
             {
-                this.control?.Dispose();
-                this.control = new VlcControl();
-                //this.ControlContainer.Content = this.control;
-                this.control.SourceProvider.CreatePlayer(this.vlcLibDirectory);
-
-                // This can also be called before EndInit
-                this.control.SourceProvider.MediaPlayer.Log += (_, args) =>
-                {
-                    string message = $"libVlc : {args.Level} {args.Message} @ {args.Module}";
-                    System.Diagnostics.Debug.WriteLine(message);
-                };
-
-                this.currentlyPlaying = model.Location;
-                if (model.Source == "PC")
-                    control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
-                else if (model.Source == "YT")
-                    control.SourceProvider.MediaPlayer.Play(new FileInfo(currentlyPlaying));
-                this.btnPlayPause.Content= FindResource("Pause");
+                Play(item);
+                this.btnPlayPause.Background = (Brush)FindResource("Pause");
             }
-        
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
