@@ -35,19 +35,17 @@ namespace Biblioteka
         /// <param name="vid">element do dodania</param>
         private void AddYTItem(Video vid)
         {
-            using (var db = new LibraryContext())
+            using var db = new LibraryContext();
+            db.Add(
+            new Song
             {
-                db.Add(
-                    new Song
-                    {
-                        Title = vid.Title,
-                        Author = vid.Author,
-                        Album = null,
-                        Location = loc,
-                        Source = "YT"
-                    });
-                db.SaveChanges();
-            }
+                Title = vid.Title,
+                Author = vid.Author,
+                Album = null,
+                Location = loc,
+                Source = "YT"
+            });
+            db.SaveChanges();
         }
 
         /// <summary>

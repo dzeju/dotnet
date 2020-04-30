@@ -9,7 +9,7 @@
             Otwiera okno wyboru pliku z którego można wybrać utwór
             </summary>
         </member>
-        <member name="M:Biblioteka.AddItem.DataRead(System.String)">
+        <member name="M:Biblioteka.AddItem.AddPCItem(System.String)">
             <summary>
             Czyta plik i jeśli może z niego wyczytać dane dodaje do bazy
             </summary>
@@ -167,7 +167,7 @@
             <summary>
             Wywołanie okna wyszukiwania filmów na YT
             </summary>
-            <param name="m"></param>
+            <param name="m">zawartość głównego okna</param>
         </member>
         <member name="M:Biblioteka.YouTubeSearch.AddYTItem(Biblioteka.Video)">
             <summary>

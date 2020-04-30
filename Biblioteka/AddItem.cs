@@ -18,7 +18,7 @@ namespace Biblioteka
                     string file = fileDialog.FileName;
                     try
                     {
-                        DataRead(file);
+                        AddPCItem(file);
                     }
                     catch (Exception)
                     {
@@ -36,7 +36,7 @@ namespace Biblioteka
         /// Czyta plik i jeśli może z niego wyczytać dane dodaje do bazy
         /// </summary>
         /// <param name="file"></param>
-        private void DataRead(string file)
+        private void AddPCItem(string file)
         {
             TagLib.File f = TagLib.File.Create(file);                            //exceptions?
             if (f.Tag.Title == "" || f.Tag.Title == null) throw new Exception();  //TEMPORARY
