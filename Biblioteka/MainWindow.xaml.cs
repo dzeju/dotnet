@@ -16,6 +16,10 @@ namespace Biblioteka
         private readonly DirectoryInfo vlcLibDirectory;
         private VlcControl control;
         private string currentlyPlaying = null;
+
+        /// <summary>
+        /// Skanuje bazę i odświeża widok, inicializuje vlc
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -31,6 +35,9 @@ namespace Biblioteka
             progBar.IsIndeterminate = false;
         }
 
+        /// <summary>
+        /// Skanuje pliki z bazy danych i jeśli plik nie istnieje na dysku to zostaje usunięty z bazy danych
+        /// </summary>
         private void Scan()
         {
             using var db = new LibraryContext();
@@ -45,6 +52,11 @@ namespace Biblioteka
             }
         }
 
+        /// <summary>
+        /// Usuwa plik z bazy danych i jeśli źródłem pliku jest YouTube to usuwa plik z dysku
+        /// </summary>
+        /// <param name="item">element bazy danych</param>
+        /// <returns>Informuje czy pomyślnie usunięto plik</returns>
         private bool Delete (Song item)
         {
             using var db = new LibraryContext();
@@ -61,12 +73,19 @@ namespace Biblioteka
             return true;
         }
 
+        /// <summary>
+        /// Odświeża DataGrid
+        /// </summary>
         public void Refresh()
         {
             using var db = new LibraryContext();
             DG.DataContext = db.Songs.ToList<Song>();
         }
 
+        /// <summary>
+        /// Wczytuje plik i go odtwarza
+        /// </summary>
+        /// <param name="item">element bazy danych</param>
         private void Play(Song item)
         {
             this.control?.Dispose();

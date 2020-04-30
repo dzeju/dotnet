@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Biblioteka</name>
+    </assembly>
+    <members>
+        <member name="M:Biblioteka.AddItem.FileOpen">
+            <summary>
+            Otwiera okno wyboru pliku z którego można wybrać utwór
+            </summary>
+        </member>
+        <member name="M:Biblioteka.AddItem.DataRead(System.String)">
+            <summary>
+            Czyta plik i jeśli może z niego wyczytać dane dodaje do bazy
+            </summary>
+            <param name="file"></param>
+        </member>
+        <member name="T:Biblioteka.App">
+            <summary>
+            Interaction logic for App.xaml
+            </summary>
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:Biblioteka.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:Biblioteka.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:Biblioteka.MainWindow">
+            <summary>
+            Interaction logic for MainWindow.xaml
+            </summary>
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:Biblioteka.MainWindow.#ctor">
+            <summary>
+            Skanuje bazę i odświeża widok, inicializuje vlc
+            </summary>
+        </member>
+        <member name="M:Biblioteka.MainWindow.Scan">
+            <summary>
+            Skanuje pliki z bazy danych i jeśli plik nie istnieje na dysku to zostaje usunięty z bazy danych
+            </summary>
+        </member>
+        <member name="M:Biblioteka.MainWindow.Delete(Biblioteka.Song)">
+            <summary>
+            Usuwa plik z bazy danych i jeśli źródłem pliku jest YouTube to usuwa plik z dysku
+            </summary>
+            <param name="item">element bazy danych</param>
+            <returns>Informuje czy pomyślnie usunięto plik</returns>
+        </member>
+        <member name="M:Biblioteka.MainWindow.Refresh">
+            <summary>
+            Odświeża DataGrid
+            </summary>
+        </member>
+        <member name="M:Biblioteka.MainWindow.Play(Biblioteka.Song)">
+            <summary>
+            Wczytuje plik i go odtwarza
+            </summary>
+            <param name="item">element bazy danych</param>
+        </member>
+        <member name="M:Biblioteka.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:Biblioteka.LibraryContext">
+            <summary>
+            Pozwala na wymianę danych pomiędzy aplikacją a plikiem
+            </summary>
+        </member>
+        <member name="P:Biblioteka.LibraryContext.Songs">
+            <summary>
+            Zarządzanie elementami bazy
+            </summary>
+        </member>
+        <member name="M:Biblioteka.LibraryContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            ustawienie pliku bazy danych
+            </summary>
+            <param name="options">opcje</param>
+        </member>
+        <member name="T:Biblioteka.Song">
+            <summary>
+            Struktura elementu bazy danych
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Song.Id">
+            <summary>
+            id elementu
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Song.Title">
+            <summary>
+            tutuł
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Song.Author">
+            <summary>
+            autor
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Song.Album">
+            <summary>
+            album
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Song.Location">
+            <summary>
+            ścieżka do pliku
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Song.Source">
+            <summary>
+            źródło
+            </summary>
+        </member>
+        <member name="T:Biblioteka.Video">
+            <summary>
+            klasa video potrzebna do wyświetlenia w datagrid oraz dodania wybranej piosenki
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Video.Title">
+            <summary>
+            tytuł
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Video.Author">
+            <summary>
+            autor
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Video.Url">
+            <summary>
+            url filmu
+            </summary>
+        </member>
+        <member name="P:Biblioteka.Video.Duration">
+            <summary>
+            czas trwania
+            </summary>
+        </member>
+        <member name="T:Biblioteka.YouTubeSearch">
+            <summary>
+            Interaction logic for YouTubeSearch.xaml
+            </summary>
+            <summary>
+            YouTubeSearch
+            </summary>
+        </member>
+        <member name="P:Biblioteka.YouTubeSearch.MW">
+            <summary>
+            klasa głównego okna do zarządzania nim w innym oknie
+            </summary>
+        </member>
+        <member name="M:Biblioteka.YouTubeSearch.#ctor(Biblioteka.MainWindow)">
+            <summary>
+            Wywołanie okna wyszukiwania filmów na YT
+            </summary>
+            <param name="m"></param>
+        </member>
+        <member name="M:Biblioteka.YouTubeSearch.AddYTItem(Biblioteka.Video)">
+            <summary>
+            Dodaje plik do bazy danych i wywołuje odświeżenie widoku DataGrid w głównym oknie
+            </summary>
+            <param name="vid">element do dodania</param>
+        </member>
+        <member name="M:Biblioteka.YouTubeSearch.Search(System.String)">
+            <summary>
+            Wyszukuje filmy z YouTube na podstawie podanej nazwy i wypełnia nimi DataGrid filmów
+            </summary>
+            <param name="txtSearch">nazwa filmu do wyszukania</param>
+        </member>
+        <member name="M:Biblioteka.YouTubeSearch.Download(System.String,System.String)">
+            <summary>
+            Pobiera audio z wybranego filmu
+            </summary>
+            <param name="url">link wybranego filmu</param>
+            <param name="name">tytuł filmu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Biblioteka.YouTubeSearch.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+    </members>
+</doc>

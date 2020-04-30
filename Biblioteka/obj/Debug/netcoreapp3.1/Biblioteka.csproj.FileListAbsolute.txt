@@ -1187,3 +1187,4 @@ C:\Users\Kuba\source\repos\dotnet\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.
 C:\Users\Kuba\source\repos\dotnet\Biblioteka\obj\Debug\netcoreapp3.1\Biblioteka.genruntimeconfig.cache
 C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\AngleSharp.dll
 C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\YoutubeExplode.dll
+C:\Users\Kuba\source\repos\dotnet\Biblioteka\bin\Debug\netcoreapp3.1\Biblioteka.xml

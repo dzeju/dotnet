@@ -14,36 +14,27 @@ namespace Biblioteka
     {
         string loc = null;
 
+        /// <summary>
+        /// klasa głównego okna do zarządzania nim w innym oknie
+        /// </summary>
         public MainWindow MW { get; }
 
+        /// <summary>
+        /// Wywołanie okna wyszukiwania filmów na YT
+        /// </summary>
+        /// <param name="m">zawartość głównego okna</param>
         public YouTubeSearch(MainWindow m)
         {
             InitializeComponent();
             MW = m;
         }
 
-        private async void BtnSearch_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Dodaje plik do bazy danych i wywołuje odświeżenie widoku DataGrid w głównym oknie
+        /// </summary>
+        /// <param name="vid">element do dodania</param>
+        private void AddYTItem(Video vid)
         {
-            progBar.IsIndeterminate = true;
-            await Search(txtSearch.Text);
-            progBar.IsIndeterminate = false;
-        }
-
-        private async void YtDG_Row_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            
-            Video vid = (Video)ytDG.SelectedItem;
-            progBar.IsIndeterminate = true;
-            try { await AddYTItemAsync(vid); }
-            catch { MessageBox.Show("Error downloading an audio"); }
-            progBar.IsIndeterminate = false;
-            MessageBox.Show("Added");
-        }
-
-        private async Task AddYTItemAsync(Video vid)
-        {
-            await Download(vid.Url, vid.Title);
-
             using (var db = new LibraryContext())
             {
                 db.Add(
@@ -57,10 +48,13 @@ namespace Biblioteka
                     });
                 db.SaveChanges();
             }
-            MW.Refresh();
         }
 
-        public async Task Search(string txtSearch)
+        /// <summary>
+        /// Wyszukuje filmy z YouTube na podstawie podanej nazwy i wypełnia nimi DataGrid filmów
+        /// </summary>
+        /// <param name="txtSearch">nazwa filmu do wyszukania</param>
+        public async Task<List<Video>> Search(string txtSearch)
         {
             var items = new YoutubeClient();
             List<Video> list = new List<Video>();
@@ -75,9 +69,15 @@ namespace Biblioteka
                 vid.Duration = item.Duration.ToString();
                 list.Add(vid);
             }
-            this.ytDG.DataContext = list;
+            return list;
         }
 
+        /// <summary>
+        /// Pobiera audio z wybranego filmu
+        /// </summary>
+        /// <param name="url">link wybranego filmu</param>
+        /// <param name="name">tytuł filmu</param>
+        /// <returns></returns>
         public async Task Download(string url, string name)
         {
             var youtube = new YoutubeClient();
@@ -88,14 +88,48 @@ namespace Biblioteka
 
             if (streamInfo == null)
             {
-                MessageBox.Show("Error downloading an audio");
-                return;
+                /* MessageBox.Show("Error downloading an audio");
+                 return;*/
+                throw new System.Exception();
             }
             else
             {
                 loc = $"Download/{name}.{streamInfo.Container}";
                 await youtube.Videos.Streams.DownloadAsync(streamInfo, loc);
             }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+
+        private async void BtnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            progBar.IsIndeterminate = true;
+            try
+            {
+                List<Video> list = await Search(txtSearch.Text);
+                ytDG.DataContext = list;
+            }
+            catch { MessageBox.Show("Error accured during search"); }
+            progBar.IsIndeterminate = false;
+        }
+
+        private async void YtDG_Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+            Video vid = (Video)ytDG.SelectedItem;
+            progBar.IsIndeterminate = true;
+            try
+            {
+                await Download(vid.Url, vid.Title);
+                AddYTItem(vid);
+            }
+            catch
+            {
+                MessageBox.Show("Error downloading an audio");
+                return;
+            }
+            MW.Refresh();
+            progBar.IsIndeterminate = false;
+            MessageBox.Show("Added");
         }
     }
 }

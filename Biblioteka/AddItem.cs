@@ -5,6 +5,9 @@ namespace Biblioteka
 {
     class AddItem
     {
+        /// <summary>
+        /// Otwiera okno wyboru pliku z którego można wybrać utwór
+        /// </summary>
         public void FileOpen()
         {
             var fileDialog = new OpenFileDialog();
@@ -29,6 +32,10 @@ namespace Biblioteka
             }
         }
 
+        /// <summary>
+        /// Czyta plik i jeśli może z niego wyczytać dane dodaje do bazy
+        /// </summary>
+        /// <param name="file"></param>
         private void DataRead(string file)
         {
             TagLib.File f = TagLib.File.Create(file);                            //exceptions?

@@ -7,6 +7,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Kuba\source\repos\dotnet\Biblioteka\Biblioteka.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="icons8-close-96.png" />
     <None Remove="icons8-pause-96.png" />
